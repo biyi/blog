@@ -1,0 +1,23 @@
+package com.wonibo.projectx.dao.docstore;
+
+import java.util.List;
+import com.wonibo.projectx.model.docstore.${vo.voName};
+
+public interface I${vo.voName}Dao{
+	
+	public List<${vo.voName}> queryByExample(${vo.voName} instance, Integer startPage, Integer pageLength);
+	
+	public boolean existByExample(${vo.voName} instance);
+	
+	public int countByExample(${vo.voName} instance);
+	
+	public int add${vo.voName}(${vo.voName} instance);
+	<#if vo.primaryKey??>
+	
+	public int update${vo.voName}ById(${vo.voName} instance);
+	
+	public ${vo.voName} get${vo.voName}ById(${vo.primaryKey.formatSimpleName} ${vo.primaryKey.name});
+	
+	public int delete${vo.voName}ById(${vo.primaryKey.formatSimpleName} ${vo.primaryKey.name});
+	</#if>
+}

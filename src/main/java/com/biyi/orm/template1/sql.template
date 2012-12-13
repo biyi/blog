@@ -1,0 +1,13 @@
+public ${vo.voName} query${vo.voName}s(
+<#if otherColAttributes??>
+<#list otherColAttributes as otherColAttribute>
+${otherColAttribute.type.simpleName} ${otherColAttribute.formatName}
+<#if otherColAttributes_size > 0>
+,
+</#if>
+</#list>
+</#if>
+){
+
+
+}

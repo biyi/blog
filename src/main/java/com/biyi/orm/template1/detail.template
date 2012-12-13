@@ -1,0 +1,32 @@
+<%@ page contentType="text/html; charset=utf-8" %><%@ page import="com.dct.util.*,com.dct.service.bean.*,com.dct.dao.bean.*,java.util.*"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+${vo.voName} ${vo.lowerVoName} = (${vo.voName})request.getAttribute("${vo.lowerVoName}");
+%>
+<html>
+	<head>
+		<title>详情${vo.voName}</title>
+	</head>
+	<body>
+		<a href="<%=basePath%>${vo.tableName}/index.do">返回</a>
+		<table>
+			<tr>
+				<td colspan="2">详情${vo.voName}</td>
+			</tr>
+			<#if vo.primaryKey??>
+			<tr>
+				<td>${vo.primaryKey.name}</td><td><%=${vo.lowerVoName}.get${vo.primaryKey.formatName}()%></td>
+			</tr>
+			</#if>
+			<#if vo.attributes??>
+			<#list vo.attributes as attribute>
+			<tr>
+				<td>${attribute.name}</td><td><%=${vo.lowerVoName}.get${attribute.formatName}()%></td>
+			</tr>
+			</#list>
+			</#if>
+		</table>
+	</body>
+</html>

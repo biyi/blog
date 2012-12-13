@@ -1,0 +1,24 @@
+package com.dct.service;
+import java.util.List;
+import com.dct.service.bean.PageBean;
+
+import com.dct.dao.bean.${vo.voName};
+
+public interface I${vo.voName}Service{
+	
+	public List<${vo.voName}> queryByExample(${vo.voName} instance, PageBean pageBean);
+	
+	public boolean existByExample(${vo.voName} instance);
+	
+	public int countByExample(${vo.voName} instance);
+	
+	public int add${vo.voName}(${vo.voName} instance);
+	<#if vo.primaryKey??>
+	
+	public int update${vo.voName}ById(${vo.voName} instance);
+	
+	public ${vo.voName} get${vo.voName}ById(${vo.primaryKey.type.simpleName} ${vo.primaryKey.name});
+	
+	public int delete${vo.voName}ById(${vo.primaryKey.type.simpleName} ${vo.primaryKey.name});
+	</#if>
+}

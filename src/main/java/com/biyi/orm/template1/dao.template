@@ -1,0 +1,168 @@
+package com.wonibo.projectx.dao.impl;
+
+import java.util.List;
+import java.util.ArrayList;
+import com.dct.dao.bean.${vo.voName};
+import com.dct.dao.I${vo.voName}Dao;
+
+public class ${vo.voName}DaoImpl extends BaseDAOImpl implements I${vo.voName}Dao{
+	
+	public List<${vo.voName}> queryByExample(${vo.voName} instance, Integer startPage, Integer pageLength){
+		StringBuilder sb = new StringBuilder("select * from `${vo.tableName}` where 1 = 1");
+		<#if vo.primaryKey??>
+		if(instance.get${vo.primaryKey.formatName}() != null){
+			${vo.voName} vo = get${vo.voName}ById(instance.get${vo.primaryKey.formatName}());
+			if(vo != null){
+				List<${vo.voName}> result = new ArrayList<${vo.voName}>(1);
+				result.add(vo);
+				return result;
+			}
+		}
+		</#if>
+		List<Object> params = new ArrayList<Object>();
+		<#if vo.attributes??>
+		<#list vo.attributes as attribute>
+		if(instance.get${attribute.formatName}() != null){
+			sb.append(" and `${attribute.colName}` = ?");
+			params.add(instance.get${attribute.formatName}());
+		}
+		</#list>
+		</#if>
+		if(startPage == null && pageLength != null){
+			sb.append(" limit ?");
+			params.add(pageLength);
+		}else if(startPage != null && pageLength != null){
+			sb.append(" limit ?,?");
+			params.add(startPage);
+			params.add(pageLength);
+		}else if(startPage != null && pageLength == null){
+			throw new IllegalArgumentException("no page length");
+		}
+		String sql = sb.toString();
+		return getJdbcTemplate().query(sql, params.toArray(), new ${vo.voName}());
+	}
+	
+	public int countByExample(${vo.voName} instance){
+		StringBuilder sb = new StringBuilder("select count(*) from `${vo.tableName}` where 1 = 1");
+		<#if vo.primaryKey??>
+		if(instance.get${vo.primaryKey.formatName}() != null){
+			if(existByExample(instance))
+				return 1;
+		}
+		</#if>
+		List<Object> params = new ArrayList<Object>();
+		<#if vo.attributes??>
+		<#list vo.attributes as attribute>
+		if(instance.get${attribute.formatName}() != null){
+			sb.append(" and `${attribute.colName}` = ?");
+			params.add(instance.get${attribute.formatName}());
+		}
+		</#list>
+		</#if>
+		String sql = sb.toString();
+		return getJdbcTemplate().queryForInt(sql, params.toArray());
+	}
+	
+	public boolean existByExample(${vo.voName} instance){
+		<#if vo.primaryKey??>
+		if(instance.get${vo.primaryKey.formatName}() != null){
+			${vo.voName} vo = get${vo.voName}ById(instance.get${vo.primaryKey.formatName}());
+			if(vo != null){
+				return true;
+			}
+			return false;
+		}
+		</#if>
+		StringBuilder sb = new StringBuilder("select 1 from `${vo.tableName}` where 1 = 1");
+		List<Object> params = new ArrayList<Object>();
+		<#if vo.attributes??>
+		<#list vo.attributes as attribute>
+		if(instance.get${attribute.formatName}() != null){
+			sb.append(" and `${attribute.colName}` = ?");
+			params.add(instance.get${attribute.formatName}());
+		}
+		</#list>
+		</#if>
+		sb.append(" limit 1");
+		String sql = sb.toString();
+		List<Integer> result = getJdbcTemplate().query(sql, params.toArray(), new SingleColumnRowMapper<Integer>(Integer.class));
+		if(result != null && result.size() > 0){
+			return true;
+		}
+		return false;
+	}
+	
+	public int add${vo.voName}(${vo.voName} instance){
+		StringBuilder sb = new StringBuilder("insert into `${vo.tableName}`(");
+		StringBuilder sb1 = new StringBuilder();
+		final List<Object> params = new ArrayList<Object>();
+		<#if vo.attributes??>
+		<#list vo.attributes as attribute>
+		if(instance.get${attribute.formatName}() != null){
+			sb.append("`${attribute.colName}`,");
+			sb1.append("?,");
+			params.add(instance.get${attribute.formatName}());
+		}
+		</#list>
+		</#if>
+		if(params.size() == 0)
+			throw new RuntimeException("no parameters set");
+		sb.deleteCharAt(sb.length() - 1);
+		sb1.deleteCharAt(sb1.length() - 1);
+		sb.append(")values(").append(sb1).append(")");
+		final String sql = sb.toString();
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		int result = getJdbcTemplate().update(new PreparedStatementCreator(){
+
+			public PreparedStatement createPreparedStatement(Connection con)
+					throws SQLException {
+				PreparedStatement ps = con.prepareStatement(sql, new String[] {"${vo.primaryKey.colName}"});
+		        for(int i = 0;i < params.size(); i++){
+		        	ps.setObject(i + 1, params.get(i));
+		        }
+		        return ps;
+			}
+			
+		}, keyHolder);
+		instance.set${vo.primaryKey.formatName}(keyHolder.getKey().intValue());
+		return result;
+	}
+	<#if vo.primaryKey??>
+	
+	public int update${vo.voName}ById(${vo.voName} instance){
+		if(instance.get${vo.primaryKey.formatName}() == null){
+			throw new NullPointerException("no primary key");
+		}
+		StringBuilder sb = new StringBuilder("update `${vo.tableName}` set");
+		List<Object> params = new ArrayList<Object>();
+		<#if vo.attributes??>
+		<#list vo.attributes as attribute>
+		if(instance.get${attribute.formatName}() != null){
+			sb.append(" `${attribute.colName}` = ?,");
+			params.add(instance.get${attribute.formatName}());
+		}
+		</#list>
+		</#if>
+		if(params.size() == 0)
+			throw new RuntimeException("no parameters set");
+		sb.deleteCharAt(sb.length() - 1);
+		sb.append(" where `${vo.primaryKey.colName}` = ?");
+		params.add(instance.get${vo.primaryKey.formatName}());
+		String sql = sb.toString();
+		return getJdbcTemplate().update(sql, params.toArray());
+	}
+	
+	public ${vo.voName} get${vo.voName}ById(${vo.primaryKey.type.simpleName} ${vo.primaryKey.name}){
+		String sql = "select * from `${vo.tableName}` where `${vo.primaryKey.colName}` = ?";
+		List<${vo.voName}> instances = getJdbcTemplate().query(sql, new Object[] {${vo.primaryKey.name}}, new ${vo.voName}());
+		if(instances != null && instances.size() > 0)
+			return instances.get(0);
+		return null; 
+	}
+	
+	public int delete${vo.voName}ById(${vo.primaryKey.type.simpleName} ${vo.primaryKey.name}){
+		String sql = "delete from `${vo.tableName}` where `${vo.primaryKey.colName}` = ?";
+		return getJdbcTemplate().update(sql, new Object[] {${vo.primaryKey.name}});
+	}
+	</#if>
+}

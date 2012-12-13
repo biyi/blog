@@ -1,0 +1,148 @@
+package com.dct.controller;
+import java.util.List;
+import com.dct.dao.bean.${vo.voName};
+import com.dct.service.I${vo.voName}Service;
+import com.dct.service.bean.PageBean;
+
+<#list vo.importClasses as importClass>
+import ${importClass.canonicalName};
+</#list>
+
+import com.dct.util.WebUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.web.servlet.ModelAndView;
+
+
+public class ${vo.voName}Controller extends BaseController{
+
+	public static final Log log = LogFactory.getLog(${vo.voName}Controller.class);
+	
+	public ModelAndView index(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		<#if vo.attributes??>
+		<#list vo.attributes as attribute>
+		${attribute.type.simpleName} ${attribute.name} = WebUtil.get${attribute.type.simpleName}(request, "${attribute.name}");
+		</#list>
+		</#if>
+		
+		
+		${vo.voName} bean = new ${vo.voName}();
+		<#if vo.attributes??>
+		<#list vo.attributes as attribute>
+		bean.set${attribute.formatName}(${attribute.name});
+		</#list>
+		</#if>
+		
+		PageBean pageBean = getPageBean(request, 20);
+		List<${vo.voName}> ${vo.lowerVoName}s = ${vo.lowerVoName}Service.queryByExample(bean, pageBean);
+		request.setAttribute("${vo.lowerVoName}s", ${vo.lowerVoName}s);
+		request.setAttribute("pageBean", pageBean);
+		
+		return new ModelAndView("${vo.lowerVoName}/index");
+	}
+	
+	public ModelAndView preAdd${vo.voName}(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return new ModelAndView("${vo.lowerVoName}/preAdd${vo.voName}");
+	}
+	
+	public ModelAndView add${vo.voName}(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		<#if vo.attributes??>
+		<#list vo.attributes as attribute>
+		${attribute.type.simpleName} ${attribute.name} = WebUtil.get${attribute.type.simpleName}(request, "${attribute.name}");
+		</#list>
+		</#if>
+		
+		
+		${vo.voName} bean = new ${vo.voName}();
+		<#if vo.attributes??>
+		<#list vo.attributes as attribute>
+		bean.set${attribute.formatName}(${attribute.name});
+		</#list>
+		</#if>
+		
+		int result = ${vo.lowerVoName}Service.add${vo.voName}(bean);
+		String message = "操作失败";
+		if(result == 1){
+			message = "操作成功";
+		}
+		request.setAttribute("result", result);
+		request.setAttribute("message", message);
+		
+		return index(request, response);
+	}
+	<#if vo.primaryKey??>
+	public ModelAndView preMod${vo.voName}(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		${vo.primaryKey.type.simpleName} ${vo.primaryKey.name} = WebUtil.get${vo.primaryKey.type.simpleName}(request, "${vo.primaryKey.name}");
+		${vo.voName} ${vo.lowerVoName} = ${vo.lowerVoName}Service.get${vo.voName}ById(${vo.primaryKey.name});
+		request.setAttribute("${vo.lowerVoName}", ${vo.lowerVoName});
+		return new ModelAndView("${vo.lowerVoName}/preMod${vo.voName}");
+	}
+	
+	public ModelAndView mod${vo.voName}(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		${vo.primaryKey.type.simpleName} ${vo.primaryKey.name} = WebUtil.get${vo.primaryKey.type.simpleName}(request, "${vo.primaryKey.name}");
+		
+		<#if vo.attributes??>
+		<#list vo.attributes as attribute>
+		${attribute.type.simpleName} ${attribute.name} = WebUtil.get${attribute.type.simpleName}(request, "${attribute.name}");
+		</#list>
+		</#if>
+		
+		${vo.voName} instance = new ${vo.voName}();
+		instance.set${vo.primaryKey.formatName}(${vo.primaryKey.name});
+		<#if vo.attributes??>
+		<#list vo.attributes as attribute>
+		instance.set${attribute.formatName}(${attribute.name});
+		</#list>
+		</#if>
+		
+		int result = ${vo.lowerVoName}Service.update${vo.voName}ById(instance);
+		String message = "操作失败";
+		if(result == 1){
+			message = "操作成功";
+		}
+		request.setAttribute("result", result);
+		request.setAttribute("message", message);
+		
+		return index(request, response);
+	}
+	
+	public ModelAndView delete${vo.voName}(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	
+		${vo.primaryKey.type.simpleName} ${vo.primaryKey.name} = WebUtil.get${vo.primaryKey.type.simpleName}(request, "${vo.primaryKey.name}");
+		
+		int result = ${vo.lowerVoName}Service.delete${vo.voName}ById(${vo.primaryKey.name});
+		String message = "操作失败";
+		if(result == 1){
+			message = "操作成功";
+		}
+		request.setAttribute("result", result);
+		request.setAttribute("message", message);
+		
+		return index(request, response);
+	}
+	</#if>
+	public ModelAndView detail${vo.voName}(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		${vo.primaryKey.type.simpleName} ${vo.primaryKey.name} = WebUtil.get${vo.primaryKey.type.simpleName}(request, "${vo.primaryKey.name}");
+		${vo.voName} ${vo.lowerVoName} = ${vo.lowerVoName}Service.get${vo.voName}ById(${vo.primaryKey.name});
+		request.setAttribute("${vo.lowerVoName}", ${vo.lowerVoName});
+		
+		return new ModelAndView("${vo.lowerVoName}/detail${vo.voName}");
+	}
+	
+	private I${vo.voName}Service ${vo.lowerVoName}Service;
+	
+	public I${vo.voName}Service get${vo.voName}Service(){
+		return ${vo.lowerVoName}Service;
+	}
+	public void set${vo.voName}Service(I${vo.voName}Service ${vo.lowerVoName}Service){
+		this.${vo.lowerVoName}Service = ${vo.lowerVoName}Service;
+	}
+}

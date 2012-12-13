@@ -1,0 +1,37 @@
+package com.dct.service.bean;
+<#list vo.importClasses as importClass>
+import ${importClass.canonicalName};
+</#list>
+
+public class ${vo.voName}Bean {
+	<#if vo.primaryKey??>
+	<#if vo.primaryKey.comment??>/**${vo.primaryKey.comment}*/</#if>
+	private ${vo.primaryKey.type.simpleName} ${vo.primaryKey.name};
+	</#if>
+	<#if vo.attributes??>
+	<#list vo.attributes as attribute>
+	<#if attribute.comment??>/**${attribute.comment}*/</#if>
+	private ${attribute.type.simpleName} ${attribute.name};
+	</#list>
+	</#if>
+	<#if vo.primaryKey??>
+	<#if vo.primaryKey.comment??>/**${vo.primaryKey.comment}*/</#if>
+	public ${vo.primaryKey.type.simpleName} get${vo.primaryKey.formatName}(){
+		return ${vo.primaryKey.name};
+	}
+	public void set${vo.primaryKey.formatName}(${vo.primaryKey.type.simpleName} ${vo.primaryKey.name}){
+		this.${vo.primaryKey.name} = ${vo.primaryKey.name};
+	}
+	</#if>
+	<#if vo.attributes??>
+	<#list vo.attributes as attribute>
+	<#if attribute.comment??>/**${attribute.comment}*/</#if>
+	public ${attribute.type.simpleName} get${attribute.formatName}(){
+		return ${attribute.name};
+	}
+	public void set${attribute.formatName}(${attribute.type.simpleName} ${attribute.name}){
+		this.${attribute.name} = ${attribute.name};
+	}
+	</#list>
+	</#if>
+}
