@@ -59,15 +59,15 @@ public class DbHelper {
 	
 	public static void writeAll(String dbName, String tableName, String path) throws Exception{
 		Vo vo = getDbInfo(dbName, tableName);
-		FileWriter writer = new FileWriter(path + "\\" + vo.getVoName() + ".java");
+		FileWriter writer = new FileWriter(path + "/" + vo.getVoName() + ".java");
 		writeVo(vo, writer);
 		writer.close();
 		
-		writer = new FileWriter(path + "\\I" + vo.getVoName() + "Dao.java");
+		writer = new FileWriter(path + "/I" + vo.getVoName() + "Dao.java");
 		writeIDao(vo, writer);
 		writer.close();
 		
-		writer = new FileWriter(path + "\\" + vo.getVoName() + "DaoImpl.java");
+		writer = new FileWriter(path + "/" + vo.getVoName() + "DaoImpl.java");
 		writeDao(vo, writer);
 		writer.close();
 	}

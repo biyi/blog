@@ -1,11 +1,23 @@
-package com.wonibo.projectx.dao.impl;
+package com.biyi.blog.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import java.util.List;
 import java.util.ArrayList;
-import com.dct.dao.bean.${vo.voName};
-import com.dct.dao.I${vo.voName}Dao;
+import com.biyi.blog.dao.vo.${vo.voName};
+import com.biyi.blog.dao.I${vo.voName}Dao;
 
-public class ${vo.voName}DaoImpl extends BaseDAOImpl implements I${vo.voName}Dao{
+
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ${vo.voName}DaoImpl extends BaseDaoImpl implements I${vo.voName}Dao{
 	
 	public List<${vo.voName}> queryByExample(${vo.voName} instance, Integer startPage, Integer pageLength){
 		StringBuilder sb = new StringBuilder("select * from `${vo.tableName}` where 1 = 1");

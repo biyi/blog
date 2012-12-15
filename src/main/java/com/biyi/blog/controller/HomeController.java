@@ -1,32 +1,41 @@
 package com.biyi.blog.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.biyi.blog.dao.vo.User;
+import com.biyi.blog.dao.vo.Category;
+import com.biyi.blog.service.ICategoryService;
 import com.biyi.blog.service.IUserService;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
-@RequestMapping(value = "/home/*")
+@RequestMapping(value = "/*")
 public class HomeController {
 	
 	@Autowired
 	private IUserService userService;
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	@Autowired
+	private ICategoryService categoryService;
 	
-	@RequestMapping(value = "index")
-	public String home() {
+	private static final Log logger = LogFactory.getLog(HomeController.class);
+	
+	@RequestMapping(value = "home")
+	public String home(HttpServletRequest request) {
 		
-		User user = userService.getUserById(1);
-		System.out.println(user.getName());
-		return "home/index";
+		List<Category> categorys = categoryService.getValidCategorys();
+		request.setAttribute("categorys", categorys);
+		
+		return "home/home";
 	}
 	
 }

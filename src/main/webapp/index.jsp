@@ -1,2 +1,2 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<jsp:forward page="/home/index.do"></jsp:forward>
+<jsp:forward page="/home.do"></jsp:forward>

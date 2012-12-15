@@ -57,14 +57,14 @@
         <property name="numTestsPerEvictionRun" value="20" />
 	</bean>
 	
-	<!--  <jdbc:initialize-database data-source="dataSource">
+	<!-- <jdbc:initialize-database data-source="dataSource">
 		<jdbc:script location="classpath:blog.sql"/>
-	</jdbc:initialize-database>-->
+	</jdbc:initialize-database> -->
 	
 	<!-- 设定transactionManager -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<!-- <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
-	</bean>
+	</bean> -->
 
 	<!--启动spring注解功能-->
 	<tx:annotation-driven transaction-manager="transactionManager" />

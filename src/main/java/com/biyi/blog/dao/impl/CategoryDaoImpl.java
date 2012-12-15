@@ -6,8 +6,10 @@ import java.sql.SQLException;
 
 import java.util.List;
 import java.util.ArrayList;
-import com.biyi.blog.dao.vo.User;
-import com.biyi.blog.dao.IUserDao;
+
+import com.biyi.blog.dao.exception.DaoException;
+import com.biyi.blog.dao.vo.Category;
+import com.biyi.blog.dao.ICategoryDao;
 
 
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -17,26 +19,30 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserDaoImpl extends BaseDaoImpl implements IUserDao{
+public class CategoryDaoImpl extends BaseDaoImpl implements ICategoryDao{
 	
-	public List<User> queryByExample(User instance, Integer startPage, Integer pageLength){
-		StringBuilder sb = new StringBuilder("select * from `user` where 1 = 1");
+	public List<Category> queryByExample(Category instance, Integer startPage, Integer pageLength){
+		StringBuilder sb = new StringBuilder("select * from `category` where 1 = 1");
 		if(instance.getId() != null){
-			User vo = getUserById(instance.getId());
+			Category vo = getCategoryById(instance.getId());
 			if(vo != null){
-				List<User> result = new ArrayList<User>(1);
+				List<Category> result = new ArrayList<Category>(1);
 				result.add(vo);
 				return result;
 			}
 		}
 		List<Object> params = new ArrayList<Object>();
-		if(instance.getUserName() != null){
-			sb.append(" and `user_name` = ?");
-			params.add(instance.getUserName());
+		if(instance.getOrderId() != null){
+			sb.append(" and `order_id` = ?");
+			params.add(instance.getOrderId());
 		}
-		if(instance.getPassword() != null){
-			sb.append(" and `password` = ?");
-			params.add(instance.getPassword());
+		if(instance.getCount() != null){
+			sb.append(" and `count` = ?");
+			params.add(instance.getCount());
+		}
+		if(instance.getStatus() != null){
+			sb.append(" and `status` = ?");
+			params.add(instance.getStatus());
 		}
 		if(instance.getName() != null){
 			sb.append(" and `name` = ?");
@@ -53,23 +59,27 @@ public class UserDaoImpl extends BaseDaoImpl implements IUserDao{
 			throw new IllegalArgumentException("no page length");
 		}
 		String sql = sb.toString();
-		return getJdbcTemplate().query(sql, params.toArray(), new User());
+		return getJdbcTemplate().query(sql, params.toArray(), new Category());
 	}
 	
-	public int countByExample(User instance){
-		StringBuilder sb = new StringBuilder("select count(*) from `user` where 1 = 1");
+	public int countByExample(Category instance){
+		StringBuilder sb = new StringBuilder("select count(*) from `category` where 1 = 1");
 		if(instance.getId() != null){
 			if(existByExample(instance))
 				return 1;
 		}
 		List<Object> params = new ArrayList<Object>();
-		if(instance.getUserName() != null){
-			sb.append(" and `user_name` = ?");
-			params.add(instance.getUserName());
+		if(instance.getOrderId() != null){
+			sb.append(" and `order_id` = ?");
+			params.add(instance.getOrderId());
 		}
-		if(instance.getPassword() != null){
-			sb.append(" and `password` = ?");
-			params.add(instance.getPassword());
+		if(instance.getCount() != null){
+			sb.append(" and `count` = ?");
+			params.add(instance.getCount());
+		}
+		if(instance.getStatus() != null){
+			sb.append(" and `status` = ?");
+			params.add(instance.getStatus());
 		}
 		if(instance.getName() != null){
 			sb.append(" and `name` = ?");
@@ -79,23 +89,27 @@ public class UserDaoImpl extends BaseDaoImpl implements IUserDao{
 		return getJdbcTemplate().queryForInt(sql, params.toArray());
 	}
 	
-	public boolean existByExample(User instance){
+	public boolean existByExample(Category instance){
 		if(instance.getId() != null){
-			User vo = getUserById(instance.getId());
+			Category vo = getCategoryById(instance.getId());
 			if(vo != null){
 				return true;
 			}
 			return false;
 		}
-		StringBuilder sb = new StringBuilder("select 1 from `user` where 1 = 1");
+		StringBuilder sb = new StringBuilder("select 1 from `category` where 1 = 1");
 		List<Object> params = new ArrayList<Object>();
-		if(instance.getUserName() != null){
-			sb.append(" and `user_name` = ?");
-			params.add(instance.getUserName());
+		if(instance.getOrderId() != null){
+			sb.append(" and `order_id` = ?");
+			params.add(instance.getOrderId());
 		}
-		if(instance.getPassword() != null){
-			sb.append(" and `password` = ?");
-			params.add(instance.getPassword());
+		if(instance.getCount() != null){
+			sb.append(" and `count` = ?");
+			params.add(instance.getCount());
+		}
+		if(instance.getStatus() != null){
+			sb.append(" and `status` = ?");
+			params.add(instance.getStatus());
 		}
 		if(instance.getName() != null){
 			sb.append(" and `name` = ?");
@@ -110,19 +124,24 @@ public class UserDaoImpl extends BaseDaoImpl implements IUserDao{
 		return false;
 	}
 	
-	public int addUser(User instance){
-		StringBuilder sb = new StringBuilder("insert into `user`(");
+	public int addCategory(Category instance){
+		StringBuilder sb = new StringBuilder("insert into `category`(");
 		StringBuilder sb1 = new StringBuilder();
 		final List<Object> params = new ArrayList<Object>();
-		if(instance.getUserName() != null){
-			sb.append("`user_name`,");
+		if(instance.getOrderId() != null){
+			sb.append("`order_id`,");
 			sb1.append("?,");
-			params.add(instance.getUserName());
+			params.add(instance.getOrderId());
 		}
-		if(instance.getPassword() != null){
-			sb.append("`password`,");
+		if(instance.getCount() != null){
+			sb.append("`count`,");
 			sb1.append("?,");
-			params.add(instance.getPassword());
+			params.add(instance.getCount());
+		}
+		if(instance.getStatus() != null){
+			sb.append("`status`,");
+			sb1.append("?,");
+			params.add(instance.getStatus());
 		}
 		if(instance.getName() != null){
 			sb.append("`name`,");
@@ -152,19 +171,23 @@ public class UserDaoImpl extends BaseDaoImpl implements IUserDao{
 		return result;
 	}
 	
-	public int updateUserById(User instance){
+	public int updateCategoryById(Category instance){
 		if(instance.getId() == null){
 			throw new NullPointerException("no primary key");
 		}
-		StringBuilder sb = new StringBuilder("update `user` set");
+		StringBuilder sb = new StringBuilder("update `category` set");
 		List<Object> params = new ArrayList<Object>();
-		if(instance.getUserName() != null){
-			sb.append(" `user_name` = ?,");
-			params.add(instance.getUserName());
+		if(instance.getOrderId() != null){
+			sb.append(" `order_id` = ?,");
+			params.add(instance.getOrderId());
 		}
-		if(instance.getPassword() != null){
-			sb.append(" `password` = ?,");
-			params.add(instance.getPassword());
+		if(instance.getCount() != null){
+			sb.append(" `count` = ?,");
+			params.add(instance.getCount());
+		}
+		if(instance.getStatus() != null){
+			sb.append(" `status` = ?,");
+			params.add(instance.getStatus());
 		}
 		if(instance.getName() != null){
 			sb.append(" `name` = ?,");
@@ -179,24 +202,30 @@ public class UserDaoImpl extends BaseDaoImpl implements IUserDao{
 		return getJdbcTemplate().update(sql, params.toArray());
 	}
 	
-	public User getUserById(Integer id){
-		String sql = "select * from `user` where `id` = ?";
-		List<User> instances = getJdbcTemplate().query(sql, new Object[] {id}, new User());
+	public Category getCategoryById(Integer id){
+		String sql = "select * from `category` where `id` = ?";
+		List<Category> instances = getJdbcTemplate().query(sql, new Object[] {id}, new Category());
 		if(instances != null && instances.size() > 0)
 			return instances.get(0);
 		return null; 
 	}
 	
-	public int deleteUserById(Integer id){
-		String sql = "delete from `user` where `id` = ?";
+	public int deleteCategoryById(Integer id){
+		String sql = "delete from `category` where `id` = ?";
 		return getJdbcTemplate().update(sql, new Object[] {id});
 	}
 
-	public User getUserByUserName(String userName) {
-		String sql = "select * from `user` where user_name = ?";
-		List<User> instances = getJdbcTemplate().query(sql, new Object[] {userName}, new User());
-		if(instances != null && instances.size() > 0)
-			return instances.get(0);
-		return null; 
+	public List<Category> getCategoryByStatus(Integer status) {
+		if(!Category.STATUS_HIDDEN.equals(status) && !Category.STATUS_NORMAL.equals(status)){
+			throw new DaoException("非正常的分类状态");
+		}
+		String sql = "select * from category where status = ? order by order_id";
+		return getJdbcTemplate().query(sql, new Object[]{status}, new Category());
+	}
+
+	public boolean existName(String name) {
+		Category instance = new Category();
+		instance.setName(name);
+		return existByExample(instance);
 	}
 }

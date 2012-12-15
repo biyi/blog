@@ -1,7 +1,7 @@
-package com.wonibo.projectx.dao.docstore;
+package com.biyi.blog.dao;
 
 import java.util.List;
-import com.wonibo.projectx.model.docstore.${vo.voName};
+import com.biyi.blog.dao.vo.${vo.voName};
 
 public interface I${vo.voName}Dao{
 	
@@ -16,8 +16,8 @@ public interface I${vo.voName}Dao{
 	
 	public int update${vo.voName}ById(${vo.voName} instance);
 	
-	public ${vo.voName} get${vo.voName}ById(${vo.primaryKey.formatSimpleName} ${vo.primaryKey.name});
+	public ${vo.voName} get${vo.voName}ById(${vo.primaryKey.simpleName} ${vo.primaryKey.name});
 	
-	public int delete${vo.voName}ById(${vo.primaryKey.formatSimpleName} ${vo.primaryKey.name});
+	public int delete${vo.voName}ById(${vo.primaryKey.simpleName} ${vo.primaryKey.name});
 	</#if>
 }

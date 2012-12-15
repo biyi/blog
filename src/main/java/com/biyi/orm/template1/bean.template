@@ -1,9 +1,15 @@
-package com.wonibo.projectx.model.docstore;
+package com.biyi.blog.dao.vo;
 <#list vo.importClasses as importClass>
 import ${importClass.canonicalName};
 </#list>
 
-public class ${vo.voName}{
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
+import org.springframework.jdbc.core.RowMapper;
+
+public class ${vo.voName} implements RowMapper<${vo.voName}>{
 	<#if vo.primaryKey??>
 	private ${vo.primaryKey.type.simpleName} ${vo.primaryKey.name};
 	</#if>
@@ -33,14 +39,14 @@ public class ${vo.voName}{
 	}
 	</#list>
 	</#if>
-	public ${vo.voName} buildFromMap(Map<String, Object> m) throws SQLException {
+	public ${vo.voName} mapRow(ResultSet rs, int rowNum) throws SQLException {
 		${vo.voName} instance = new ${vo.voName}();
 		<#if vo.primaryKey??>
-		instance.set${vo.primaryKey.formatName}((${vo.primaryKey.formatSimpleName})m.get("${vo.primaryKey.colName}"));
+		instance.set${vo.primaryKey.formatName}(rs.get${vo.primaryKey.formatSimpleName}("${vo.primaryKey.colName}"));
 		</#if>
 		<#if vo.attributes??>
 		<#list vo.attributes as attribute>
-		instance.set${attribute.formatName}((${attribute.formatSimpleName})m.get("${attribute.colName}"));
+		instance.set${attribute.formatName}(rs.get${attribute.formatSimpleName}("${attribute.colName}"));
 		</#list>
 		</#if>
 		return instance;

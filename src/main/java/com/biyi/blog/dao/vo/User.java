@@ -3,10 +3,10 @@ package com.biyi.blog.dao.vo;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 import org.springframework.jdbc.core.RowMapper;
 
 public class User implements RowMapper<User>{
-	
 	private Integer id;
 	
 	private String userName;
