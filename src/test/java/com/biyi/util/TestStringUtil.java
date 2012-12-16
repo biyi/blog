@@ -14,15 +14,15 @@ public class TestStringUtil {
 	public void after(){}
 	
 	@Test
-	public void test_isEmpty(){
+	public void test_isNull(){
 		try {
-			Assert.assertTrue(StringUtil.isEmpty(null));
-			Assert.assertTrue(StringUtil.isEmpty(""));
-			Assert.assertTrue(StringUtil.isEmpty("    "));
-			Assert.assertTrue(StringUtil.isEmpty("null"));
-			Assert.assertTrue(StringUtil.isEmpty("null "));
+			Assert.assertTrue(StringUtil.isNull(null));
+			Assert.assertTrue(StringUtil.isNull(""));
+			Assert.assertTrue(StringUtil.isNull("    "));
+			Assert.assertTrue(StringUtil.isNull("null"));
+			Assert.assertTrue(StringUtil.isNull("null "));
 			
-			Assert.assertFalse(StringUtil.isEmpty("null1 "));
+			Assert.assertFalse(StringUtil.isNull("null1 "));
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();

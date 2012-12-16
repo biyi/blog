@@ -2,7 +2,6 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-UserSessionBean userSessionBean = WebUtil.getUserSessionBean(request);
 String message = (String)request.getAttribute(WebUtil.ERROR);
 Category category = (Category)request.getAttribute("category");
 %>
@@ -36,50 +35,11 @@ Category category = (Category)request.getAttribute("category");
 
   <body>
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">&nbsp;&nbsp;&nbsp;</a>
-          <div class="nav-collapse collapse">
-            <p class="navbar-text pull-right">
-              欢迎登录， <a href="#" class="navbar-link"><%=userSessionBean.getName() %></a>
-            </p>
-            <ul class="nav">
-              <li class="active"><a href="#">首页</a></li>
-              <li><a href="#about">关于</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
+    <%@include file="../../common/banner.jsp" %>
 
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="span3">
-          <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-              <li class="nav-header">分类管理</li>
-              <li><a href="<%=basePath %>admin/category/list.do">浏览分类</a></li>
-              <li class="active"><a href="<%=basePath %>admin/category/preAdd.do">添加分类</a></li>
-              <li class="nav-header">博文管理</li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li class="nav-header">其他管理</li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-            </ul>
-          </div><!--/.well -->
-        </div><!--/span-->
+        <%@include file="../common/left.jsp" %>
         <div class="span9">
         	<form class="form-horizontal" action="<%=basePath%>admin/category/add.do" method="post">
         		<%
@@ -94,7 +54,16 @@ Category category = (Category)request.getAttribute("category");
 				<div class="control-group">
 			    	<label class="control-label" for="name">分类名</label>
 			    	<div class="controls">
-			    		<input type="text" name="name" id="name"  value="<%=category.getName()%>" placeholder="分类名">
+			    		<input type="text" name="name" id="name"  value="<%=StringUtil.noNull(category.getName())%>" placeholder="分 类 名">
+			    	</div>
+			    </div>
+			    <div class="control-group">
+			    	<label class="control-label" for="status">状态</label>
+			    	<div class="controls">
+			    		<select name="status">
+						  <option value="1">正常</option>
+						  <option value="0">隐藏</option>
+						</select>
 			    	</div>
 			    </div>
 			    <div class="control-group">

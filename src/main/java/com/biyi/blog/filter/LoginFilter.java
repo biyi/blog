@@ -53,7 +53,9 @@ public class LoginFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest)arg0;
 		HttpServletResponse response = (HttpServletResponse)arg1;
 		String url = request.getRequestURI();
-		if(isAllowUrl(url) || WebUtil.checkUserSessionBean(request)){
+		boolean isAllowUrl = isAllowUrl(url);
+		boolean isLogin = WebUtil.checkUserSessionBean(request);
+		if(isAllowUrl || isLogin){
 			//可以访问
 			try {
 				arg2.doFilter(arg0, arg1);
@@ -70,10 +72,10 @@ public class LoginFilter implements Filter {
 	}
 	
 	public void init(FilterConfig arg0) throws ServletException {
-		String contextPath = StringUtil.RSlash(arg0.getServletContext().getContextPath());
+		String contextPath = StringUtil.URLRSlash(arg0.getServletContext().getContextPath());
 		redirectUrl = contextPath + arg0.getInitParameter("redirectUrl");
 		errorUrl = contextPath + arg0.getInitParameter("errorUrl");
-		startWithUrl = contextPath + "admin/";
+		startWithUrl = contextPath + StringUtil.URLRSlash("admin");
 		allowUrls = new HashSet<String>();
 		String urls = arg0.getInitParameter("allowUrls");
 		if(!StringUtil.isEmpty(urls)){

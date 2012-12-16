@@ -3,6 +3,7 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 List<Category> categorys = (List<Category>)request.getAttribute("categorys");
+List<Blog> blogs = (List<Blog>)request.getAttribute("blogs");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,24 +32,7 @@ List<Category> categorys = (List<Category>)request.getAttribute("categorys");
 
   <body>
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">&nbsp;&nbsp;&nbsp;</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li class="active"><a href="#">首页</a></li>
-              <li><a href="#about">关于</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
+    <%@include file="../common/banner.jsp" %>
 
     <div class="container">
 
@@ -64,50 +48,29 @@ List<Category> categorys = (List<Category>)request.getAttribute("categorys");
 				<div class="row-fluid">
 					<div class="span12">
 						<div class="offset1">
-							<div class="row">
-								<h3>memcache相关的总结</h3>
-								<p>memcached   是以LiveJournal   旗下Danga Interactive   公司的Brad Fitzpatric   为首开发的一款软件。现在
-已成为mixi、hatena、Facebook、Vox、LiveJournal等众多服务中提高Web应用扩展性的重要因素。<a class="btn btn-link" href="#">查看更多</a></p>
-							</div>
+							
+							<%if(blogs != null && !blogs.isEmpty()){
+								
+								for(int i = 0; i < blogs.size(); i++){
+									Blog blog = blogs.get(i);
+									%>
+									<div class="row">
+										<h3><%=blog.getTitle() %></h3>
+										<p><%=blog.getDescription() %><a class="btn btn-link" href="#">查看更多</a></p>
+									</div>
+									<%
+									if(i < (blogs.size() - 1)){
+										%><hr><%
+									}
+								}
+							} %>
+							
+						</div>
 
-							<hr>
-
-							<div class="row">
-								<h3>memcache相关的总结</h3>
-								<p>memcached   是以LiveJournal   旗下Danga Interactive   公司的Brad Fitzpatric   为首开发的一款软件。现在
-已成为mixi、hatena、Facebook、Vox、LiveJournal等众多服务中提高Web应用扩展性的重要因素。<a class="btn btn-link" href="#">查看更多</a></p>
-							</div>
-
-							<hr>
-
-							<div class="row">
-								<h3>memcache相关的总结</h3>
-								<p>memcached   是以LiveJournal   旗下Danga Interactive   公司的Brad Fitzpatric   为首开发的一款软件。现在
-已成为mixi、hatena、Facebook、Vox、LiveJournal等众多服务中提高Web应用扩展性的重要因素。<a class="btn btn-link" href="#">查看更多</a></p>
-							</div>
-
-							<hr>
-
-							<div class="row">
-								<h3>memcache相关的总结</h3>
-								<p>memcached   是以LiveJournal   旗下Danga Interactive   公司的Brad Fitzpatric   为首开发的一款软件。现在
-已成为mixi、hatena、Facebook、Vox、LiveJournal等众多服务中提高Web应用扩展性的重要因素。<a class="btn btn-link" href="#">查看更多</a></p>
-							</div>
-							<hr>
-
-							<div class="row">
-								<h3>memcache相关的总结</h3>
-								<p>memcached   是以LiveJournal   旗下Danga Interactive   公司的Brad Fitzpatric   为首开发的一款软件。现在
-已成为mixi、hatena、Facebook、Vox、LiveJournal等众多服务中提高Web应用扩展性的重要因素。<a class="btn btn-link" href="#">查看更多</a></p>
-							</div>
-
-
-					</div>
-
+					</div>	
 				</div>	
-			</div>	
 
-		</div>	
+			</div>	
 			<div class="span4">
 				<blockquote>
 					<ul class="unstyled">
@@ -116,10 +79,9 @@ List<Category> categorys = (List<Category>)request.getAttribute("categorys");
 							for(Category category: categorys){
 								%><li><a href=""><%=category.getName() %>(<%=category.getCount() %>)</a></li><%
 							}
-						}else{
-							%><li><a href="">似乎没有分类(0)</a></li><%
 						}
 						%>
+						<li><a href="">其他分类</a></li>
 					</ul>	
 				</blockquote>
 			</div>

@@ -3,7 +3,8 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 String message = (String)request.getAttribute(WebUtil.ERROR);
-Category category = (Category)request.getAttribute("category");
+Blog blog = (Blog)request.getAttribute("blog");
+List<Category> categorys = (List<Category>)request.getAttribute("categorys");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,6 +16,7 @@ Category category = (Category)request.getAttribute("category");
     <meta name="author" content="">
 
     <!-- Le styles -->
+    <link href="<%=basePath %>css/bootstrap-wysihtml5.css" rel="stylesheet" >
     <link href="<%=basePath %>css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
       body {
@@ -23,6 +25,11 @@ Category category = (Category)request.getAttribute("category");
       }
       .sidebar-nav {
         padding: 9px 0;
+      }
+      
+      #content{
+      	height: 600px;
+      	width: 90%;
       }
     </style>
     <link href="<%=basePath %>css/bootstrap-responsive.css" rel="stylesheet">
@@ -41,7 +48,7 @@ Category category = (Category)request.getAttribute("category");
       <div class="row-fluid">
         <%@include file="../common/left.jsp" %>
         <div class="span9">
-        	<form class="form-horizontal" action="<%=basePath%>admin/category/update.do" method="post">
+        	<form action="<%=basePath%>admin/blog/add.do" method="post">
         		<%
         		if(!StringUtil.isEmpty(message)){
         			%>
@@ -51,27 +58,46 @@ Category category = (Category)request.getAttribute("category");
     				</div><%
         		}
         		%>
-        		<input type="hidden" value="<%=category.getId() %>" name="id"/>
-				<div class="control-group">
-			    	<label class="control-label" for="name">分类名</label>
-			    	<div class="controls">
-			    		<input type="text" name="name" id="name" value="<%=category.getName()%>" placeholder="分类名">
-			    	</div>
-			    </div>
-			    <div class="control-group">
-			    	<label class="control-label" for="status">状态</label>
-			    	<div class="controls">
-			    		<select name="status">
-						  <option value="1" <%=StringUtil.select(Category.STATUS_NORMAL, category.getStatus()) %>>正常</option>
-						  <option value="0" <%=StringUtil.select(Category.STATUS_HIDDEN, category.getStatus()) %>>隐藏</option>
-						</select>
-			    	</div>
-			    </div>
-			    <div class="control-group">
-			    	<div class="controls">
-			    		<button type="submit" class="btn">确 定</button>
-			    	</div>
-			    </div>
+        		<fieldset>
+					<legend>添加博文</legend>
+					
+					<label for="title">标题名</label>
+					<input type="text" name="title" id="title"  value="<%=StringUtil.noNull(blog.getTitle())%>" placeholder="标 题 名">
+					
+					<label for="keyword">关键词</label>
+					<input type="text" name="keyword" id="keyword"  value="<%=StringUtil.noNull(blog.getKeyword())%>" placeholder="关 键 词">
+					
+					<label for="description">简介</label>
+					<input type="text" name="description" id="description"  value="<%=StringUtil.noNull(blog.getDescription())%>" placeholder="简 介">
+					
+					<label for="status">状态</label>
+					<select name="status">
+			    		<option value="0">隐藏</option>
+						<option value="1">正常</option>
+					</select>
+					
+					<label for="status">分类</label>
+					<%
+					if(categorys != null && !categorys.isEmpty()){
+						for(Category category: categorys){
+							%>
+							<label class="checkbox inline">
+								<input type="checkbox" name="categoryId" value="<%=category.getId()%>"> <%=category.getName() %>
+							</label>
+							<%
+						}
+					}
+					%>
+					
+					<label style="margin-top:10px" for="content">内容</label>
+					<textarea id="content" name="content" placeholder="内 容"><%=StringUtil.noNull(blog.getContent())%></textarea>
+					
+					
+					<label class="checkbox">
+						<input type="checkbox"> Check me out
+					</label>
+					<button type="submit" class="btn">确 定</button>
+				</fieldset>
 			 </form>
         </div><!--/span-->
       </div><!--/row-->
@@ -87,8 +113,13 @@ Category category = (Category)request.getAttribute("category");
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    
+    <script src="<%=basePath %>js/wysihtml5-0.3.0.min.js"></script>
     <script src="<%=basePath %>js/jquery.min.js"></script>
 	<script src="<%=basePath %>js/bootstrap.min.js"></script>
-
+	<script src="<%=basePath %>js/bootstrap-wysihtml5.js"></script>
+	<script type="text/javascript">
+		$('#content').wysihtml5();
+	</script>
   </body>
 </html>

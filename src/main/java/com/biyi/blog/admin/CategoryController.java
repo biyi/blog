@@ -10,17 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.support.SessionStatus;
 
 import com.biyi.blog.controller.BaseController;
 import com.biyi.blog.dao.vo.Category;
 import com.biyi.blog.service.ICategoryService;
 import com.biyi.blog.service.exception.ServiceException;
 import com.biyi.blog.util.WebUtil;
-import com.biyi.util.StringUtil;
 
 @Controller
 @RequestMapping(value = "/admin/category/*")
@@ -50,12 +46,12 @@ public class CategoryController extends BaseController {
 	
 	@RequestMapping(value = "add")
 	public String add(@ModelAttribute("category")Category category, 
-			SessionStatus status,
 			HttpServletRequest request){
 		
+		Integer userId = WebUtil.getUserId(request);
 		try {
+			category.setUserId(userId);
 			categoryService.tryAddCategory(category);
-			status.setComplete();
 			return "redirect:/admin/category/list.do";
 		} catch (ServiceException e) {
 			logger.error("login error", e);
@@ -83,12 +79,12 @@ public class CategoryController extends BaseController {
 	
 	@RequestMapping(value = "update")
 	public String update(@ModelAttribute("category")Category category, 
-			SessionStatus status,
 			HttpServletRequest request){
 		
+		Integer userId = WebUtil.getUserId(request);
+		category.setUserId(userId);
 		try {
 			categoryService.tryUpdateCategory(category);
-			status.setComplete();
 			return "redirect:/admin/category/list.do";
 		} catch (ServiceException e) {
 			logger.error("login error", e);

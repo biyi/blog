@@ -22,7 +22,9 @@ public class Category implements RowMapper<Category>{
 	 */
 	public static final Integer ID_OTHER_ID = 1000;
 	
-	private Integer id;
+private Integer id;
+	
+	private Integer userId;
 	
 	private Integer orderId;
 	
@@ -37,6 +39,13 @@ public class Category implements RowMapper<Category>{
 	}
 	public void setId(Integer id){
 		this.id = id;
+	}
+	
+	public Integer getUserId(){
+		return userId;
+	}
+	public void setUserId(Integer userId){
+		this.userId = userId;
 	}
 	
 	public Integer getOrderId(){
@@ -56,16 +65,6 @@ public class Category implements RowMapper<Category>{
 	public Integer getStatus(){
 		return status;
 	}
-	public String getFormatStatus(){
-		
-		for(int i = 0; i < STATUSS.length; i++){
-			if(STATUSS[i].equals(status)){
-				return STATUS_TEXTS[i];
-			}
-		}
-		
-		return WebUtil.NULL_FIELD;
-	}
 	public void setStatus(Integer status){
 		this.status = status;
 	}
@@ -79,10 +78,21 @@ public class Category implements RowMapper<Category>{
 	public Category mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Category instance = new Category();
 		instance.setId(rs.getInt("id"));
+		instance.setUserId(rs.getInt("user_id"));
 		instance.setOrderId(rs.getInt("order_id"));
 		instance.setCount(rs.getInt("count"));
 		instance.setStatus(rs.getInt("status"));
 		instance.setName(rs.getString("name"));
 		return instance;
+	}
+	public String getFormatStatus(){
+		
+		for(int i = 0; i < STATUSS.length; i++){
+			if(STATUSS[i].equals(status)){
+				return STATUS_TEXTS[i];
+			}
+		}
+		
+		return WebUtil.NULL_FIELD;
 	}
 }

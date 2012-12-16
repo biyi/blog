@@ -11,6 +11,10 @@ public final class StringUtil {
 		return (str == null) || ("".equals(str = str.trim()));
 	}
 	
+	public static boolean isNull(String str){
+		return (str == null) || ("".equals(str = str.trim())) || "null".equals(str);
+	}
+	
 	public static void main(String[] args) {
 		System.out.println(File.separator);
 	}
@@ -23,10 +27,32 @@ public final class StringUtil {
 		return path + File.separator;
 	}
 	
+	public static String URLRSlash(String path) {
+		
+		if(path.endsWith("/")){
+			return path;
+		}
+		return path + "/";
+	}
+	
 	public static String defaultValue(String value, String defaultValue){
 		if(isEmpty(value)){
 			return defaultValue;
 		}
 		return value;
+	}
+	
+	public static String noNull(String str){
+		if(isNull(str)){
+			return "";
+		}
+		return str;
+	}
+	
+	public static String select(Integer dest, Integer source){
+		if(dest.equals(source)){
+			return "selected='selected'";
+		}
+		return "";
 	}
 }

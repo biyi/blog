@@ -19,6 +19,11 @@ public class WebUtil {
 	public static UserSessionBean getUserSessionBean(HttpServletRequest request){
 		return (UserSessionBean)request.getSession(true).getAttribute(USER_SESSION_BEAN);
 	}
+	
+	public static Integer getUserId(HttpServletRequest request){
+		UserSessionBean userSessionBean = (UserSessionBean)request.getSession(true).getAttribute(USER_SESSION_BEAN);
+		return userSessionBean.getId();
+	}
 
 	public static boolean checkUserSessionBean(HttpServletRequest request) {
 		return getUserSessionBean(request) != null;

@@ -1,4 +1,4 @@
-package com.biyi.blog;
+package com.biyi;
 
 import org.junit.After;
 import org.junit.Assert;

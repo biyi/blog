@@ -1,6 +1,7 @@
 package com.biyi.blog.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.biyi.blog.dao.vo.Category;
 
@@ -27,5 +28,10 @@ public interface ICategoryService {
 	 * 修改分类
 	 */
 	public void tryUpdateCategory(Category category);
+
+	/**
+	 * 获取博文所在的分类
+	 */
+	public Set<Integer> getCategoryIdsByBlogId(Integer id);
 
 }

@@ -2,8 +2,7 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-String message = (String)request.getAttribute(WebUtil.ERROR);
-Category category = (Category)request.getAttribute("category");
+List<Blog> blogs = (List<Blog>)request.getAttribute("blogs");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,38 +40,38 @@ Category category = (Category)request.getAttribute("category");
       <div class="row-fluid">
         <%@include file="../common/left.jsp" %>
         <div class="span9">
-        	<form class="form-horizontal" action="<%=basePath%>admin/category/update.do" method="post">
-        		<%
-        		if(!StringUtil.isEmpty(message)){
-        			%>
-        			<div class="alert">
-    					<button type="button" class="close" data-dismiss="alert">&times;</button>
-    					<strong>警告!</strong> <%=message %>
-    				</div><%
-        		}
-        		%>
-        		<input type="hidden" value="<%=category.getId() %>" name="id"/>
-				<div class="control-group">
-			    	<label class="control-label" for="name">分类名</label>
-			    	<div class="controls">
-			    		<input type="text" name="name" id="name" value="<%=category.getName()%>" placeholder="分类名">
-			    	</div>
-			    </div>
-			    <div class="control-group">
-			    	<label class="control-label" for="status">状态</label>
-			    	<div class="controls">
-			    		<select name="status">
-						  <option value="1" <%=StringUtil.select(Category.STATUS_NORMAL, category.getStatus()) %>>正常</option>
-						  <option value="0" <%=StringUtil.select(Category.STATUS_HIDDEN, category.getStatus()) %>>隐藏</option>
-						</select>
-			    	</div>
-			    </div>
-			    <div class="control-group">
-			    	<div class="controls">
-			    		<button type="submit" class="btn">确 定</button>
-			    	</div>
-			    </div>
-			 </form>
+        	<div class="row-fluid">
+        		<div class="span11">
+        			<table class="table table-striped">
+		        		<thead>
+		        			<tr>
+		        				<th>#</th>
+		        				<th>标题</th>
+		        				<th>创建时间</th>
+		        				<th>修改时间</th>
+		        				<th>状态</th>
+		        				<th>操作</th>
+		        			</tr>
+		        		</thead>
+		        		<%
+		        		if(blogs != null && !blogs.isEmpty()){
+		        			for(Blog blog: blogs){
+		        				%>
+		        				<tr>
+		        					<td><%=blog.getId() %></td>
+		        					<td><%=blog.getTitle() %></td>
+		        					<td><%=blog.getFormatCreateTime() %></td>
+		        					<td><%=blog.getFormatUpdateTime() %></td>
+		        					<td><%=blog.getFormatStatus() %></td>
+		        					<td><a href="<%=basePath %>admin/blog/preUpdate.do?id=<%=blog.getId()%>">修改</a></td>
+		        				</tr>
+		        				<%
+		        			}
+		        		}
+		        		%>
+		    		</table>
+        		</div>
+        	</div>
         </div><!--/span-->
       </div><!--/row-->
 
